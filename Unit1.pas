@@ -5,11 +5,13 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ToolWin, Vcl.ActnMan, Vcl.ActnCtrls,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ToolWin, Vcl.ActnMan,
+  Vcl.ActnCtrls,
   Vcl.ActnMenus, Vcl.Grids, Vcl.Menus, System.Net.URLClient,
   System.Net.HttpClient, System.Net.HttpClientComponent, REST.Types,
   REST.Client, REST.Authenticator.OAuth, Data.Bind.Components,
-  Data.Bind.ObjectScope, Data.Bind.EngExt, Vcl.Bind.DBEngExt, Vcl.Bind.Grid,
+  Data.Bind.ObjectScope, Data.Bind.EngExt, Vcl.Bind.DBEngExt,
+  Vcl.Bind.Grid,
   System.Rtti, System.Bindings.Outputs, Vcl.Bind.Editors, Data.Bind.Grid,
   Vcl.StdCtrls, System.JSON, System.Generics.Collections;
 
@@ -122,7 +124,7 @@ begin
   for var int in Data do
     inc(goukei, int);
   left := 1;
-  right := (goukei div teisu) + 100 * teisu;
+  right := goukei div (teisu - 100);
   while left <= right do
   begin
     param := (right - left) div 2 + left;
