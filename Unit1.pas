@@ -16,6 +16,8 @@ uses
   Vcl.StdCtrls, System.JSON, System.Generics.Collections;
 
 type
+  TFunc = function(data: Single): integer;
+
   TForm1 = class(TForm)
     StringGrid1: TStringGrid;
     MainMenu1: TMainMenu;
@@ -33,13 +35,12 @@ type
     procedure N4Click(Sender: TObject);
     procedure N2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
   private
     { Private êÈåæ }
     procedure writejson(JSON: TJSONArray);
     procedure init;
-    function calc(temp: integer): integer;
-    procedure answer(temp: integer);
+    class function calc(temp: integer; func: TFunc): integer;
+    procedure answer(temp: integer; func: TFunc);
   public
     { Public êÈåæ }
   end;
@@ -58,31 +59,27 @@ const
 
 var
   Data: TArray<integer>;
+  fn: TFunc;
 
-procedure TForm1.answer(temp: integer);
+procedure TForm1.answer(temp: integer; func: TFunc);
 begin
   StringGrid1.Cells[5, 0] := 'ãcê»êî';
   StringGrid1.Cells[5, 48] := teisu.ToString;
   for var i := 1 to 47 do
-    StringGrid1.Cells[5, i] := Ceil(Data[i - 1] / temp).ToString;
+    StringGrid1.Cells[5, i] := func(Data[i - 1] / temp).ToString;
 end;
 
-function TForm1.calc(temp: integer): integer;
+class function TForm1.calc(temp: integer; func: TFunc): integer;
 begin
   result := 0;
   for var int in Data do
-    inc(result, Ceil(int / temp));
+    inc(result, func(int / temp));
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  Initialize(Data);
   SetLength(Data, 47);
-end;
-
-procedure TForm1.FormDestroy(Sender: TObject);
-begin
-  Finalize(Data);
+  fn:=@Ceil;
 end;
 
 procedure TForm1.init;
@@ -128,14 +125,14 @@ begin
   while left <= right do
   begin
     param := (right - left) div 2 + left;
-    giseki := calc(param);
+    giseki := calc(param,fn);
     if giseki > teisu then
       left := param + 1
     else if giseki < teisu then
       right := param - 1
     else
     begin
-      answer(param);
+      answer(param,fn);
       Caption := 'Ç§Ç‹Ç≠Ç¢Ç´Ç‹ÇµÇΩ';
       Exit;
     end;

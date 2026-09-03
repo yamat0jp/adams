@@ -12,7 +12,6 @@ object Form1: TForm1
   Font.Style = []
   Menu = MainMenu1
   OnCreate = FormCreate
-  OnDestroy = FormDestroy
   TextHeight = 15
   object StringGrid1: TStringGrid
     Left = 0
